@@ -1,9 +1,11 @@
 package com.tdd.katas.springboot.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+@Entity
 public class User {
 
     @Id
@@ -56,4 +58,5 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }
