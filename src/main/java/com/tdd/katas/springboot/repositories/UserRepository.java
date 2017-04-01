@@ -1,7 +1,7 @@
 package com.tdd.katas.springboot.repositories;
 
-import org.springframework.stereotype.Repository;
+import com.tdd.katas.springboot.model.User;
+import org.springframework.data.repository.CrudRepository;
 
-@Repository
-public interface UserRepository {
+public interface UserRepository extends CrudRepository<User,Long>{
 }
