@@ -59,4 +59,13 @@ public class User {
         this.email = email;
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        return
+                obj != null
+                && obj instanceof User
+                && ((User) obj).getId() != null
+                && ((User) obj).getId().equals(getId());
+    }
 }

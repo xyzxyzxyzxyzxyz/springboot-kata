@@ -39,9 +39,10 @@ public class UserServiceImplTest {
 
     @Test
     public void when_FindOne_Retrieve_Expected_User() throws Exception {
-        User expected = new User(1L,"user1","password", "email@email.com");
-        given(userRepository.findOne(1L)).willReturn(expected);
+        User original = new User(1L,"user1","password", "email@email.com");
+        given(userRepository.findOne(1L)).willReturn(original);
 
+        User expected = new User(1L,"new_user1","new_password", "new_email@email.com");
         assertEquals("The returned user is as expected ", expected, userService.findOne(1L));
     }
 

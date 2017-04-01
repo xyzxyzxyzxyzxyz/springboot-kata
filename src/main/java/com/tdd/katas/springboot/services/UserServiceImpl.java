@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findOne(long l) {
-        return null;
+    public User findOne(long userId) {
+        return this.userRepository.findOne(userId);
     }
 }
