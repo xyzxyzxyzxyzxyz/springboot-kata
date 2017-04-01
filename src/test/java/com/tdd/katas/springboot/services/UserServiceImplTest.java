@@ -2,6 +2,7 @@ package com.tdd.katas.springboot.services;
 
 import com.tdd.katas.springboot.model.User;
 import com.tdd.katas.springboot.repositories.UserRepository;
+import org.apache.el.stream.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,6 +52,7 @@ public class UserServiceImplTest {
 
         assertTrue("The user is returned as is from the repository", expected == userService.findOne(1L));
     }
+
     @Test
     public void when_SaveOrUpdateTheUser_The_User_Is_Updated_Or_Created() throws Exception {
         User userToBeCreatedOrUpdated = new User(1l,"user1","password", "email@email.com");
@@ -61,6 +63,16 @@ public class UserServiceImplTest {
 
         verify(userRepository).save(userToBeCreatedOrUpdated);
         assertTrue("The user is created or updated and returned as is from the repository", createdOrUpdatedUser == userToBeCreatedOrUpdated);
+    }
+
+    @Test
+    public void when_RemoveOneUser_The_User_Is_Removed() throws Exception {
+        User userToBeDelete = new User(1L,"user1","password", "email@email.com");
+
+        userService.delete(userToBeDelete);
+
+        verify(userRepository).delete(userToBeDelete);
+
     }
 
 }

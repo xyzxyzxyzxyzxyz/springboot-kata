@@ -10,4 +10,6 @@ public interface UserService {
     User findOne(long l);
 
     User save(User userToBeSaved);
+
+    void delete(User userToBeDelete);
 }
