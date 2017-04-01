@@ -4,6 +4,7 @@ import com.tdd.katas.springboot.model.User;
 import com.tdd.katas.springboot.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,11 @@ public class UserController {
     @GetMapping
     public List<User> findAll(){
         return userService.findAll();
+    }
+
+    @GetMapping("/{userId}")
+    public User findOne(@PathVariable long userId){
+        return userService.findOne(userId);
     }
 
 }
