@@ -2,20 +2,18 @@ package com.tdd.katas.springboot.services;
 
 import com.tdd.katas.springboot.model.User;
 import com.tdd.katas.springboot.repositories.UserRepository;
-import org.apache.el.stream.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
+
 
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -72,7 +70,43 @@ public class UserServiceImplTest {
         userService.delete(userToBeDelete);
 
         verify(userRepository).delete(userToBeDelete);
-
     }
+
+    @Test
+    public void service_Always_Propagates_Exceptions() throws Exception {
+        User user = new User(1L,"user1","password", "email@email.com");
+
+        IllegalStateException databaseNotOpenException = new IllegalStateException("Database not open!");
+
+        doThrow(databaseNotOpenException).when(userRepository).findAll();
+        assertThrowsIllegalStateException(() -> userRepository.findAll());
+
+        doThrow(databaseNotOpenException).when(userRepository).findOne(1L);
+        assertThrowsIllegalStateException(() -> userRepository.findOne(1L));
+
+        doThrow(databaseNotOpenException).when(userRepository).save(user);
+        assertThrowsIllegalStateException(() -> userRepository.save(user));
+
+        doThrow(databaseNotOpenException).when(userRepository).delete(user);
+        assertThrowsIllegalStateException(() -> userRepository.delete(user));
+
+        assertThrowsIllegalStateException(new Runnable() {
+            @Override
+            public void run() {
+                userRepository.delete(user);
+            }
+        });
+    }
+
+
+    private void assertThrowsIllegalStateException(Runnable runnable) {
+        try {
+            runnable.run();
+            fail("Should have thrown exception");
+        }
+        catch (IllegalStateException e) {
+        }
+    }
+
 
 }
