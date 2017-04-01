@@ -51,24 +51,16 @@ public class UserServiceImplTest {
 
         assertTrue("The user is returned as is from the repository", expected == userService.findOne(1L));
     }
-
     @Test
-    public void when_SaveNewUser_The_User_Is_Saved() throws Exception {
-        User userToBeSaved = new User(null,"user1","password", "email@email.com");
+    public void when_SaveOrUpdateTheUser_The_User_Is_Updated_Or_Created() throws Exception {
+        User userToBeCreatedOrUpdated = new User(1l,"user1","password", "email@email.com");
 
-        // When the mock repo is called, the User ID is set
-        given(userRepository.save(userToBeSaved)).willAnswer(new Answer<User>() {
-            @Override
-            public User answer(InvocationOnMock invocation) throws Throwable {
-                userToBeSaved.setId(1L);
-                return userToBeSaved;
-            }
-        });
+        given(userRepository.save(userToBeCreatedOrUpdated)).willReturn(userToBeCreatedOrUpdated);
 
-        User savedUser = userService.save(userToBeSaved);
+        User createdOrUpdatedUser = userService.save(userToBeCreatedOrUpdated);
 
-        verify(userRepository).save(userToBeSaved);
-        assertTrue("The returned saved user id is not null ", savedUser == userToBeSaved);
+        verify(userRepository).save(userToBeCreatedOrUpdated);
+        assertTrue("The user is created or updated and returned as is from the repository", createdOrUpdatedUser == userToBeCreatedOrUpdated);
     }
 
 }
