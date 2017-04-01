@@ -6,7 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
+
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
@@ -30,37 +33,42 @@ public class UserServiceImplTest {
     @Test
     public void when_FindAll_Retrieve_List_Of_Users() throws Exception {
 
-        List<User> userList = new ArrayList<>();
-        userList.add(new User(1L,"user1","password", "email@email.com"));
+        List<User> expected = new ArrayList<>();
+        expected.add(new User(1L,"user1","password", "email@email.com"));
 
-        given(userRepository.findAll()).willReturn(userList);
+        given(userRepository.findAll()).willReturn(expected);
 
-        assertEquals("The returned user list is as expected ", userList, userService.findAll());
+        List<User> actual = userService.findAll();
+
+        verify(userRepository).findAll();
+        assertTrue("The user list is returned as is from the repository", expected == actual);
     }
 
     @Test
     public void when_FindOne_Retrieve_Expected_User() throws Exception {
-        User original = new User(1L,"user1","password", "email@email.com");
-        given(userRepository.findOne(1L)).willReturn(original);
+        User expected = new User(1L,"user1","password", "email@email.com");
+        given(userRepository.findOne(1L)).willReturn(expected);
 
-        User expected = new User(1L,"new_user1","new_password", "new_email@email.com");
-        assertEquals("The returned user is as expected ", expected, userService.findOne(1L));
-
+        assertTrue("The user is returned as is from the repository", expected == userService.findOne(1L));
     }
 
     @Test
     public void when_SaveNewUser_The_User_Is_Saved() throws Exception {
         User userToBeSaved = new User(null,"user1","password", "email@email.com");
-        User expected = new User(1L,"user1","password", "email@email.com");
 
-        given(userRepository.save(userToBeSaved)).willReturn(expected);
+        // When the mock repo is called, the User ID is set
+        given(userRepository.save(userToBeSaved)).willAnswer(new Answer<User>() {
+            @Override
+            public User answer(InvocationOnMock invocation) throws Throwable {
+                userToBeSaved.setId(1L);
+                return userToBeSaved;
+            }
+        });
 
         User savedUser = userService.save(userToBeSaved);
 
         verify(userRepository).save(userToBeSaved);
-        assertNotNull("The returned saved user id is not null ", savedUser.getId());
-        assertEquals("The returned saved user login is equals", userToBeSaved.getLogin(), savedUser.getLogin());
+        assertTrue("The returned saved user id is not null ", savedUser == userToBeSaved);
     }
-
 
 }
