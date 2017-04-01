@@ -14,6 +14,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 @RunWith(SpringRunner.class)
@@ -38,6 +40,5 @@ public class UserServiceImplTest {
         given(userRepository.findAll()).willReturn(userList);
 
         assertEquals("The returned user list is as expected ", userList, userService.findAll());
-
     }
 }
