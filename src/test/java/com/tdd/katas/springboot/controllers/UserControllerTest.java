@@ -44,7 +44,25 @@ public class UserControllerTest {
                     .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$[0].id", is(expectedUserList.get(0).getId().intValue())));
-
     }
+
+    @Test
+    public void testFindOneUser() throws Exception {
+
+        User expectedUser = new User(1L,"user1","password", "email@email.com");
+
+        given(this.userService.findOne(1L))
+                .willReturn(expectedUser);
+
+        this.mvc.perform(
+                get("/users/1")
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is(expectedUser.getId().intValue())));
+    }
+
 }
