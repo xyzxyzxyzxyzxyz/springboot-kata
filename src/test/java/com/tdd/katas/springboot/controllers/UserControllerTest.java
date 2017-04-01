@@ -62,7 +62,11 @@ public class UserControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(expectedUser.getId().intValue())));
+                .andExpect(jsonPath("$.id", is(expectedUser.getId().intValue())))
+                .andExpect(jsonPath("$.login", is(expectedUser.getLogin())))
+                .andExpect(jsonPath("$.password", is(expectedUser.getPassword())))
+                .andExpect(jsonPath("$.email", is(expectedUser.getEmail()))
+        );
     }
 
 }
