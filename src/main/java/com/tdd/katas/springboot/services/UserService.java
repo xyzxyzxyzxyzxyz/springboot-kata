@@ -8,4 +8,6 @@ public interface UserService {
     List<User> findAll();
 
     User findOne(long l);
+
+    User save(User userToBeSaved);
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -44,6 +45,21 @@ public class UserServiceImplTest {
 
         User expected = new User(1L,"new_user1","new_password", "new_email@email.com");
         assertEquals("The returned user is as expected ", expected, userService.findOne(1L));
+
+    }
+
+    @Test
+    public void when_SaveNewUser_The_User_Is_Saved() throws Exception {
+        User userToBeSaved = new User(null,"user1","password", "email@email.com");
+        User expected = new User(1L,"user1","password", "email@email.com");
+
+        given(userRepository.save(userToBeSaved)).willReturn(expected);
+
+        User savedUser = userService.save(userToBeSaved);
+
+        verify(userRepository).save(userToBeSaved);
+        assertNotNull("The returned saved user id is not null ", savedUser.getId());
+        assertEquals("The returned saved user login is equals", userToBeSaved.getLogin(), savedUser.getLogin());
     }
 
 
