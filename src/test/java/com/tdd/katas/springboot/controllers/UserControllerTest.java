@@ -44,7 +44,7 @@ public class UserControllerTest {
                     .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(expectedUserList.get(0).getId())));
+                .andExpect(jsonPath("$[0].id", is(expectedUserList.get(0).getId().intValue())));
 
     }
 }
