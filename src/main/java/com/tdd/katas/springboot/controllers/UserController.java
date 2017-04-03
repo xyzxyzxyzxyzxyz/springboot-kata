@@ -42,4 +42,20 @@ public class UserController {
         return response;
     }
 
+    @PutMapping("/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody User userToBeUpdated){
+
+        if (userToBeUpdated.getId()!=null && userId != userToBeUpdated.getId()) {
+            throw new IllegalArgumentException("The id used in the url must match with the entity id");
+        }
+
+        //overriding the id when it is null
+        userToBeUpdated.setId(userId);
+
+        User updatedUser = userService.save(userToBeUpdated);
+
+        ResponseEntity<User> response = new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        return response;
+    }
+
 }
