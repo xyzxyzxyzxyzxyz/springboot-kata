@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -73,12 +74,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testSaveUser() throws Exception {
+    public void testCreateUser() throws Exception {
 
-        User userToBeSaved = new User(1L,"user1","password", "email@email.com");
+        User createdUser = new User(1L,"user1","password", "email@email.com");
 
-        given(this.userService.save(userToBeSaved))
-                .willReturn(userToBeSaved);
+        given(this.userService.save(any(User.class)))
+                .willReturn(createdUser);
 
         this.mvc.perform(
                     post("/users")
@@ -86,10 +87,9 @@ public class UserControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                             "{" +
-                                    "\"id\": 1," +
-                                    "\"login\": \"user1\"," +
-                                    "\"password\": \"password\"," +
-                                    "\"email\": \"email@email.com\"" +
+                                    "\"login\": \""+ createdUser.getLogin() + "\"," +
+                                    "\"password\": \""+ createdUser.getPassword() + "\"," +
+                                    "\"email\": \""+ createdUser.getEmail() + "\"" +
                             "}"
                     )
                 )
