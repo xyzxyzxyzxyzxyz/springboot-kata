@@ -20,6 +20,9 @@ public class User {
     @NotNull
     private String email;
 
+    public User() {
+    }
+
     public User(Long id, String login, String password, String email) {
         this.id = id;
         this.login = login;
