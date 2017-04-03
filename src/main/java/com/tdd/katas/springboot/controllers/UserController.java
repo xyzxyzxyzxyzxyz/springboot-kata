@@ -23,8 +23,19 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public User findOne(@PathVariable long userId){
-        return userService.findOne(userId);
+    public ResponseEntity<User> findOne(@PathVariable long userId){
+
+        ResponseEntity<User> response;
+
+        User user =  userService.findOne(userId);
+
+        if(user != null) {
+            response = new ResponseEntity<>(user, HttpStatus.OK);
+        }else {
+            response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return response;
     }
 
     @PostMapping
