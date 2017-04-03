@@ -50,7 +50,10 @@ public class UserControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$[0].id", is(expectedUserList.get(0).getId().intValue())));
+                .andExpect(jsonPath("$[0].id", is(expectedUserList.get(0).getId().intValue())))
+                .andExpect(jsonPath("$[0].login", is(expectedUserList.get(0).getLogin())))
+                .andExpect(jsonPath("$[0].password", is(expectedUserList.get(0).getPassword())))
+                .andExpect(jsonPath("$[0].email", is(expectedUserList.get(0).getEmail())));
     }
 
       @Test
