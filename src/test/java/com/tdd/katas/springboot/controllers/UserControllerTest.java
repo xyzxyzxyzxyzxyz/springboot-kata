@@ -7,12 +7,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -67,6 +70,32 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.password", is(expectedUser.getPassword())))
                 .andExpect(jsonPath("$.email", is(expectedUser.getEmail()))
         );
+    }
+
+    @Test
+    public void testSaveUser() throws Exception {
+
+        User userToBeSaved = new User(1L,"user1","password", "email@email.com");
+
+        given(this.userService.save(userToBeSaved))
+                .willReturn(userToBeSaved);
+
+        this.mvc.perform(
+                    post("/users")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(
+                            "{" +
+                                    "\"id\": 1," +
+                                    "\"login\": \"user1\"," +
+                                    "\"password\": \"password\"," +
+                                    "\"email\": \"email@email.com\"" +
+                            "}"
+                    )
+                )
+                .andExpect(status().isCreated())
+                .andExpect(header().string(HttpHeaders.LOCATION, endsWith("/users/1")));
+
     }
 
 }
