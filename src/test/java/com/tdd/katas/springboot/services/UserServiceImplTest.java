@@ -65,7 +65,7 @@ public class UserServiceImplTest {
 
     @Test
     public void when_RemoveOneUser_The_User_Is_Removed() throws Exception {
-        User userToBeDelete = new User(1L,"user1","password", "email@email.com");
+        long userToBeDelete = 1l;
 
         userService.delete(userToBeDelete);
 

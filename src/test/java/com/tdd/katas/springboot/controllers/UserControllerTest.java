@@ -4,6 +4,7 @@ import com.tdd.katas.springboot.model.User;
 import com.tdd.katas.springboot.services.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import static org.mockito.BDDMockito.given;
+import static sun.plugin.javascript.navig.JSType.Option;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
@@ -125,6 +127,20 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.login", is(userToBeUpdated.getLogin())))
                 .andExpect(jsonPath("$.password", is(userToBeUpdated.getPassword())))
                 .andExpect(jsonPath("$.email", is(userToBeUpdated.getEmail())));
+
+    }
+
+    @Test
+    public void testDeleteUser() throws Exception {
+
+        Long userToBeUpdated = 1l;
+
+        Mockito.doNothing().when(this.userService).delete(userToBeUpdated);
+
+        this.mvc.perform(
+                delete("/users/" + userToBeUpdated)
+        )
+        .andExpect(status().isNoContent());
 
     }
 

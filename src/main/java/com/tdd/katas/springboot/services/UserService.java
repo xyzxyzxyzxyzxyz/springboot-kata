@@ -11,5 +11,5 @@ public interface UserService {
 
     User save(User userToBeSaved);
 
-    void delete(User userToBeDelete);
+    void delete(long userToBeDelete);
 }
