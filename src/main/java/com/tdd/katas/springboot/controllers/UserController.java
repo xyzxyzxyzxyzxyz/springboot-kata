@@ -29,6 +29,10 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user){
+        if (user.getId()!=null) {
+            throw new IllegalArgumentException("This endpoint is for creating new users only");
+        }
+
         User savedUser = userService.save(user);
 
         HttpHeaders headers = new HttpHeaders();
