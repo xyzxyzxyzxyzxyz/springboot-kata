@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody User userToBeUpdated){
+    public ResponseEntity<User> updateUser(@PathVariable long userId, @RequestBody User userToBeUpdated){
 
         if (userToBeUpdated.getId()!=null && userId != userToBeUpdated.getId()) {
             throw new IllegalArgumentException("The id used in the url must match with the entity id");
