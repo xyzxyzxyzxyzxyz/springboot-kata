@@ -98,4 +98,34 @@ public class UserControllerTest {
 
     }
 
+    @Test
+    public void testUpdateUser() throws Exception {
+
+        User userToBeUpdated = new User(1L,"user1","password", "email@email.com");
+
+        given(this.userService.save(userToBeUpdated))
+                .willReturn(userToBeUpdated);
+
+        this.mvc.perform(
+                    put("/users/" + userToBeUpdated.getId())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(
+                            "{" +
+                                " \"id\": " + userToBeUpdated.getId() + "," +
+                                " \"login\": \"" + userToBeUpdated.getLogin() + "\", " +
+                                " \"password\": \"" + userToBeUpdated.getPassword() + "\", " +
+                                " \"email\": \"" + userToBeUpdated.getEmail() + "\" " +
+                            "}"
+                    )
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is(userToBeUpdated.getId().intValue())))
+                .andExpect(jsonPath("$.login", is(userToBeUpdated.getLogin())))
+                .andExpect(jsonPath("$.password", is(userToBeUpdated.getPassword())))
+                .andExpect(jsonPath("$.email", is(userToBeUpdated.getEmail())));
+
+    }
+
 }
