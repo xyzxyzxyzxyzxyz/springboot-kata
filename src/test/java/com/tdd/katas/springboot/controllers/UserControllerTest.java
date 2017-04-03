@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import static org.mockito.BDDMockito.given;
-import static sun.plugin.javascript.navig.JSType.Option;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
@@ -54,7 +53,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[0].id", is(expectedUserList.get(0).getId().intValue())));
     }
 
-    @Test
+      @Test
     public void testFindOneUser() throws Exception {
 
         User expectedUser = new User(1L,"user1","password", "email@email.com");
@@ -65,14 +64,28 @@ public class UserControllerTest {
         this.mvc.perform(
                 get("/users/1")
                         .accept(MediaType.APPLICATION_JSON)
-                )
+        )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.id", is(expectedUser.getId().intValue())))
                 .andExpect(jsonPath("$.login", is(expectedUser.getLogin())))
                 .andExpect(jsonPath("$.password", is(expectedUser.getPassword())))
                 .andExpect(jsonPath("$.email", is(expectedUser.getEmail()))
-        );
+                );
+    }
+
+    @Test
+    public void testFindNonExistingUser() throws Exception {
+
+        long nonExistingUserId = 1l;
+
+        given(this.userService.findOne(nonExistingUserId))
+                .willReturn(null);
+
+        this.mvc.perform(
+                get("/users/"+nonExistingUserId)
+        )
+                .andExpect(status().isNotFound());
     }
 
     @Test
