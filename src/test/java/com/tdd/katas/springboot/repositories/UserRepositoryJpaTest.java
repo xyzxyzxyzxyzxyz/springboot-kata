@@ -54,17 +54,18 @@ public class UserRepositoryJpaTest {
 
         index = usersList.indexOf(savedUser1);
         assertNotEquals("savedUser1 should be in the list", -1, index);
-        assertEquals("The userId should match", savedUser1.getId(), usersList.get(index).getId());
-        assertEquals("The login should match", savedUser1.getLogin(), usersList.get(index).getLogin());
-        assertEquals("The password should match", savedUser1.getPassword(), usersList.get(index).getPassword());
-        assertEquals("The email should match", savedUser1.getEmail(), usersList.get(index).getEmail());
+        assertUsersAreEqual(savedUser1, usersList.get(index));
 
         index = usersList.indexOf(savedUser2);
         assertNotEquals("savedUser2 should be in the list", -1, index);
-        assertEquals("The userId should match", savedUser2.getId(), usersList.get(index).getId());
-        assertEquals("The login should match", savedUser2.getLogin(), usersList.get(index).getLogin());
-        assertEquals("The password should match", savedUser2.getPassword(), usersList.get(index).getPassword());
-        assertEquals("The email should match", savedUser2.getEmail(), usersList.get(index).getEmail());
+        assertUsersAreEqual(savedUser2, usersList.get(index));
+    }
+
+    private void assertUsersAreEqual(User expectedUser, User actualUser) {
+        assertEquals("The userId should match", expectedUser.getId(), actualUser.getId());
+        assertEquals("The login should match", expectedUser.getLogin(), actualUser.getLogin());
+        assertEquals("The password should match", expectedUser.getPassword(), actualUser.getPassword());
+        assertEquals("The email should match", expectedUser.getEmail(), actualUser.getEmail());
     }
 
     private List<User> findAllUsers() {
