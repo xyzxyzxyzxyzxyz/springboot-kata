@@ -30,4 +30,27 @@ public class UserRepositoryJpaTest {
         assertTrue("There should be no users initially", usersList.isEmpty());
     }
 
+    @Test
+    public void testSaveShouldStoreUserAndReturnIt() {
+
+        User userToBeSaved = new User(null,"login","password", "email@email.com");
+
+        User savedUser =  userRepository.save(userToBeSaved);
+
+        assertNotNull("The user should not be null", savedUser);
+        assertNotNull("The userId should not be null", savedUser.getId());
+        assertEquals("The login should match ", userToBeSaved.getLogin(), savedUser.getLogin());
+        assertEquals("The password should match ", userToBeSaved.getPassword(), savedUser.getPassword());
+        assertEquals("The email should match ", userToBeSaved.getEmail(), savedUser.getEmail());
+
+        User foundUser = entityManager.find(User.class, savedUser.getId());
+
+        assertNotNull("The user should not be null", foundUser);
+        assertEquals("The userId should match ", savedUser.getId(), foundUser.getId());
+        assertEquals("The login should match ", savedUser.getLogin(), foundUser.getLogin());
+        assertEquals("The password should match ", savedUser.getPassword(), foundUser.getPassword());
+        assertEquals("The email should match ", savedUser.getEmail(), foundUser.getEmail());
+
+    }
+
 }
