@@ -61,13 +61,6 @@ public class UserRepositoryJpaTest {
         assertUsersAreEqual(savedUser2, usersList.get(index));
     }
 
-    private void assertUsersAreEqual(User expectedUser, User actualUser) {
-        assertEquals("The userId should match", expectedUser.getId(), actualUser.getId());
-        assertEquals("The login should match", expectedUser.getLogin(), actualUser.getLogin());
-        assertEquals("The password should match", expectedUser.getPassword(), actualUser.getPassword());
-        assertEquals("The email should match", expectedUser.getEmail(), actualUser.getEmail());
-    }
-
     private List<User> findAllUsers() {
         EntityManager em = entityManager.getEntityManager();
 
@@ -90,18 +83,25 @@ public class UserRepositoryJpaTest {
 
         assertNotNull("The user should not be null", savedUser);
         assertNotNull("The userId should not be null", savedUser.getId());
-        assertEquals("The login should match ", userToBeSaved.getLogin(), savedUser.getLogin());
-        assertEquals("The password should match ", userToBeSaved.getPassword(), savedUser.getPassword());
-        assertEquals("The email should match ", userToBeSaved.getEmail(), savedUser.getEmail());
+        assertUsersDataIsEqual(userToBeSaved, savedUser);
 
         User foundUser = entityManager.find(User.class, savedUser.getId());
 
         assertNotNull("The user should not be null", foundUser);
-        assertEquals("The userId should match ", savedUser.getId(), foundUser.getId());
-        assertEquals("The login should match ", savedUser.getLogin(), foundUser.getLogin());
-        assertEquals("The password should match ", savedUser.getPassword(), foundUser.getPassword());
-        assertEquals("The email should match ", savedUser.getEmail(), foundUser.getEmail());
+        assertUsersAreEqual(savedUser, foundUser);
+    }
 
+    private void assertUsersAreEqual(User expectedUser, User actualUser) {
+        // Check the ID
+        assertEquals("The userId should match", expectedUser.getId(), actualUser.getId());
+        // Check the data
+        assertUsersDataIsEqual(expectedUser, actualUser);
+    }
+
+    private void assertUsersDataIsEqual(User expectedUser, User actualUser) {
+        assertEquals("The login should match", expectedUser.getLogin(), actualUser.getLogin());
+        assertEquals("The password should match", expectedUser.getPassword(), actualUser.getPassword());
+        assertEquals("The email should match", expectedUser.getEmail(), actualUser.getEmail());
     }
 
 }
