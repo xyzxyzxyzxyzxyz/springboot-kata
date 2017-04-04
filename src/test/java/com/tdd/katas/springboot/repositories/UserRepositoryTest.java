@@ -68,4 +68,22 @@ public class UserRepositoryTest {
 
     }
 
+    @Test
+    public void testUpdateShouldUpdateUserAndReturnIt() {
+
+        User userToBeSaved = new User(null,"login","password", "email@email.com");
+        User savedUser =  userRepository.save(userToBeSaved);
+
+        User userToBeUpdated = new User(savedUser.getId(), "login2","password2", "email2@email.com");
+
+        User updatedUser =  userRepository.save(userToBeUpdated);
+
+        assertEquals("The id should match ", userToBeUpdated.getId(), updatedUser.getId());
+        assertEquals("The login should match ", userToBeUpdated.getLogin(), updatedUser.getLogin());
+        assertEquals("The password should match ", userToBeUpdated.getPassword(), updatedUser.getPassword());
+        assertEquals("The email should match ", userToBeUpdated.getEmail(), updatedUser.getEmail());
+
+    }
+
+
 }
