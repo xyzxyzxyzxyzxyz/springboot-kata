@@ -8,6 +8,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -24,10 +29,25 @@ public class UserRepositoryJpaTest {
 
     @Test
     public void testFindAllShouldReturnNoResults() {
-        assertNotNull(entityManager);
+        List<User> userEMList = findAllUsers();
 
         List<User> usersList = (List<User>) userRepository.findAll();
-        assertTrue("There should be no users initially", usersList.isEmpty());
+
+        assertTrue("There should be no users initially", userEMList.isEmpty());
+        assertTrue("The repository should not return any users also", usersList.isEmpty());
+    }
+
+    private List<User> findAllUsers() {
+        EntityManager em = entityManager.getEntityManager();
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> rootEntry = cq.from(User.class);
+        CriteriaQuery<User> all = cq.select(rootEntry);
+
+        TypedQuery<User> allQuery = em.createQuery(all);
+
+        return allQuery.getResultList();
     }
 
     @Test
