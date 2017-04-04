@@ -1,4 +1,55 @@
 package com.tdd.katas.springboot.repositories;
 
+import com.tdd.katas.springboot.model.User;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+@RunWith(SpringRunner.class)
+@DataJpaTest
 public class UserRepositoryTest {
+
+    /*
+        findAll - 0 results
+        createOne
+        findAll - 1+ results
+            - create
+        findOne
+        updateOne
+        deleteOne
+
+     */
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Test
+    public void testFindAllShouldReturnNoResults() {
+        List<User> usersList = (List<User>) userRepository.findAll();
+        assertTrue("There should be no users initially", usersList.isEmpty());
+    }
+
+    @Test
+    public void testSaveShouldStoreUserAndReturnIt() {
+
+        User userToBeSaved = new User(null,"login","password", "email@email.com");
+
+        User savedUser =  userRepository.save(userToBeSaved);
+
+        assertNotNull("The user should not be null", savedUser);
+        assertNotNull("The userId should not be null", savedUser.getId());
+        assertEquals("The login should match ", userToBeSaved.getLogin(), savedUser.getLogin());
+        assertEquals("The password should match ", userToBeSaved.getPassword(), savedUser.getPassword());
+        assertEquals("The email should match ", userToBeSaved.getEmail(), savedUser.getEmail());
+
+    }
+
 }

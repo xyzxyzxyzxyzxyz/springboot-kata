@@ -26,6 +26,7 @@ import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
+
 @WithMockUser
 public class UserControllerTest {
 
