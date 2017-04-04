@@ -52,4 +52,20 @@ public class UserRepositoryTest {
 
     }
 
+    @Test
+    public void testFindOneShouldRetrieveTheSpecifiedUser() {
+
+        User userToBeRetrieved = new User(null,"login","password", "email@email.com");
+        userToBeRetrieved = userRepository.save(userToBeRetrieved);
+
+        User foundUser = userRepository.findOne(userToBeRetrieved.getId());
+
+        assertNotNull("The user should not be null", foundUser);
+        assertEquals("The ID should match ", userToBeRetrieved.getId(), foundUser.getId());
+        assertEquals("The login should match ", userToBeRetrieved.getLogin(), foundUser.getLogin());
+        assertEquals("The password should match ", userToBeRetrieved.getPassword(), foundUser.getPassword());
+        assertEquals("The email should match ", userToBeRetrieved.getEmail(), foundUser.getEmail());
+
+    }
+
 }
