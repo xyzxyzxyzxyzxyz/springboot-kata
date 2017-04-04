@@ -9,9 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -84,6 +82,21 @@ public class UserRepositoryTest {
         assertEquals("The email should match ", userToBeUpdated.getEmail(), updatedUser.getEmail());
 
     }
+
+    @Test
+    public void testDeleteShouldRemoveAnExistingUser() {
+
+        User userToBeSaved = new User(null,"login","password", "email@email.com");
+        User savedUser =  userRepository.save(userToBeSaved);
+
+        userRepository.delete(savedUser.getId());
+
+        User deletedUser = userRepository.findOne(savedUser.getId());
+
+        assertNull("The user should no longer exist", deletedUser);
+
+    }
+
 
 
 }
