@@ -13,18 +13,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class UserRepositoryTest {
-
-    /*
-        findAll - 0 results
-        createOne
-        findAll - 1+ results
-            - create
-        findOne
-        updateOne
-        deleteOne
-
-     */
+public class UserRepositorySelfTest {
 
     @Autowired
     private UserRepository userRepository;
