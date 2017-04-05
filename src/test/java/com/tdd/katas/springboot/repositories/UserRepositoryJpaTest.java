@@ -100,10 +100,7 @@ public class UserRepositoryJpaTest {
         User foundUser = userRepository.findOne(userToBeRetrieved.getId());
 
         assertNotNull("The user should not be null", foundUser);
-        assertEquals("The ID should match ", userToBeRetrieved.getId(), foundUser.getId());
-        assertEquals("The login should match ", userToBeRetrieved.getLogin(), foundUser.getLogin());
-        assertEquals("The password should match ", userToBeRetrieved.getPassword(), foundUser.getPassword());
-        assertEquals("The email should match ", userToBeRetrieved.getEmail(), foundUser.getEmail());
+        assertUsersAreEqual(userToBeRetrieved, foundUser);
 
     }
 
@@ -129,6 +126,22 @@ public class UserRepositoryJpaTest {
 
     }
 
+    @Test
+    public void testDeleteShouldRemoveAnExistingUser() {
+
+        // Create a new user with EM
+        User userToBeSaved = new User(null,"login","password", "email@email.com");
+        User savedUser =  entityManager.persist(userToBeSaved);
+
+        // Delete it with the Repository
+        userRepository.delete(savedUser.getId());
+
+        // Check that the user does not exist with the EM
+        User deletedUser = entityManager.find(User.class, savedUser.getId());
+
+        assertNull("The user should no longer exist", deletedUser);
+
+    }
 
 
 
