@@ -91,6 +91,55 @@ public class UserRepositoryJpaTest {
         assertUsersAreEqual(savedUser, foundUser);
     }
 
+    @Test
+    public void testFindOneShouldRetrieveTheSpecifiedUser() {
+
+        User userToBeRetrieved = new User(null,"login","password", "email@email.com");
+        userToBeRetrieved = entityManager.persist(userToBeRetrieved);
+
+        User foundUser = userRepository.findOne(userToBeRetrieved.getId());
+
+        assertNotNull("The user should not be null", foundUser);
+        assertEquals("The ID should match ", userToBeRetrieved.getId(), foundUser.getId());
+        assertEquals("The login should match ", userToBeRetrieved.getLogin(), foundUser.getLogin());
+        assertEquals("The password should match ", userToBeRetrieved.getPassword(), foundUser.getPassword());
+        assertEquals("The email should match ", userToBeRetrieved.getEmail(), foundUser.getEmail());
+
+    }
+
+    @Test
+    public void testUpdateShouldUpdateUserAndReturnIt() {
+        /*
+            1- Create it with EM
+            2- Update the user with the R
+            3- Compare the data in the returned object
+            4- Look for the object in the database with EM
+         */
+
+        // Create it with EM
+        User userToBeSaved = new User(null,"login","password", "email@email.com");
+        User savedUser =  entityManager.persist(userToBeSaved);
+
+        // Update the user with the Repository
+        User userToBeUpdated = new User(savedUser.getId(), "login2","password2", "email2@email.com");
+        User updatedUser =  userRepository.save(userToBeUpdated);
+
+        // Compare the data in the returned object
+        assertUsersAreEqual(userToBeUpdated, updatedUser);
+
+        // Look for the object in the database with EM
+        User retrievedUser = entityManager.find(User.class, updatedUser.getId());
+
+        // Look for the object in the database with EM
+        assertNotNull("The user should not be null", retrievedUser);
+        assertUsersAreEqual(retrievedUser, updatedUser);
+
+    }
+
+
+
+
+
     private void assertUsersAreEqual(User expectedUser, User actualUser) {
         // Check the ID
         assertEquals("The userId should match", expectedUser.getId(), actualUser.getId());
