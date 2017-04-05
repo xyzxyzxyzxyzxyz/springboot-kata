@@ -160,7 +160,7 @@ public class UserRepositoryJpaTest {
         assertFalse("Should not contain an unmatching user", foundUsers.contains(unmatchingUser3));
 
         List<User> userEMList = entityManager.getEntityManager().
-                createQuery("select u from user u where u.login = :login and u.password = :password and u.email = :email", User.class)
+                createQuery("select u from User u where u.login = :login and u.password = :password and u.email = :email", User.class)
                     .setParameter("login", userFilter.getLogin())
                     .setParameter("password", userFilter.getPassword())
                     .setParameter("email", userFilter.getEmail())
