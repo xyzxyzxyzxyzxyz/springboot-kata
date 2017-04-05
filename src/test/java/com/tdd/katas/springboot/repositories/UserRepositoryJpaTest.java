@@ -40,11 +40,8 @@ public class UserRepositoryJpaTest {
 
     @Test
     public void testFindAllShouldReturnAllResults() {
-        User userToBeSaved1 = new User(null,"login","password", "email@email.com");
-        User userToBeSaved2 = new User(null,"login2","password2", "email2@email.com");
-
-        User savedUser1 =  entityManager.persist(userToBeSaved1);
-        User savedUser2 =  entityManager.persist(userToBeSaved2);
+        User savedUser1 =  createNewUser("login","password", "email@email.com");
+        User savedUser2 =  createNewUser("login2","password2", "email2@email.com");
 
         List<User> usersList = (List<User>) userRepository.findAll();
 
@@ -94,8 +91,7 @@ public class UserRepositoryJpaTest {
     @Test
     public void testFindOneShouldRetrieveTheSpecifiedUser() {
 
-        User userToBeRetrieved = new User(null,"login","password", "email@email.com");
-        userToBeRetrieved = entityManager.persist(userToBeRetrieved);
+        User userToBeRetrieved = createNewUser("login","password", "email@email.com");
 
         User foundUser = userRepository.findOne(userToBeRetrieved.getId());
 
@@ -107,8 +103,7 @@ public class UserRepositoryJpaTest {
     @Test
     public void testUpdateShouldUpdateUserAndReturnIt() {
         // Create it with EM
-        User userToBeSaved = new User(null,"login","password", "email@email.com");
-        User savedUser =  entityManager.persist(userToBeSaved);
+        User savedUser = createNewUser("login","password", "email@email.com");
 
         // Update the user with the Repository
         User userToBeUpdated = new User(savedUser.getId(), "login2","password2", "email2@email.com");
@@ -130,8 +125,7 @@ public class UserRepositoryJpaTest {
     public void testDeleteShouldRemoveAnExistingUser() {
 
         // Create a new user with EM
-        User userToBeSaved = new User(null,"login","password", "email@email.com");
-        User savedUser =  entityManager.persist(userToBeSaved);
+        User savedUser = createNewUser("login","password", "email@email.com");
 
         // Delete it with the Repository
         userRepository.delete(savedUser.getId());
@@ -143,7 +137,10 @@ public class UserRepositoryJpaTest {
 
     }
 
-
+    private User createNewUser(String login, String password, String email) {
+        User userToBeSaved = new User(null,login,password, email);
+        return entityManager.persist(userToBeSaved);
+    }
 
 
     private void assertUsersAreEqual(User expectedUser, User actualUser) {
