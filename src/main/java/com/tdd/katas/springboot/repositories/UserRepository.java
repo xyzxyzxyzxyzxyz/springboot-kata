@@ -19,5 +19,13 @@ public interface UserRepository extends CrudRepository<User,Long>{
     )
     List<User> findAllByLoginPasswordEmail(@Param("userFilter") User userFilter);
 
+    @Query(
+            "select u " +
+                    "from User u " +
+                    "where " +
+                    "u.login = ?#{[0]} " +
+                    "and u.password = ?#{[1]} " +
+                    "and u.email = ?#{[2]}"
+    )
     List<User> findAllByLoginPasswordEmail_variant2(String login, String password, String email);
 }
