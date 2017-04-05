@@ -180,8 +180,43 @@ public class UserRepositoryJpaTest {
         User unmatchingUser2 = createNewUser("login","password2", "email@email.com");
         User unmatchingUser3 = createNewUser("login","password", "email2@email.com");
 
-        User userFilter = new User(null,"login","password", "email@email.com");
+        String login = "login";
+        String password = "password";
+        String email = "email@email.com";
         List<User> foundUsers =  userRepository.findAllByLoginPasswordEmail_variant2("login","password", "email@email.com");
+
+        // Check that all matching users are returned
+        assertTrue("Should contain a matching user", foundUsers.contains(matchingUser1));
+        assertTrue("Should contain a matching user", foundUsers.contains(matchingUser2));
+
+        // Check that the unmatched users are not returned
+        assertFalse("Should not contain an unmatching user", foundUsers.contains(unmatchingUser1));
+        assertFalse("Should not contain an unmatching user", foundUsers.contains(unmatchingUser2));
+        assertFalse("Should not contain an unmatching user", foundUsers.contains(unmatchingUser3));
+
+        List<User> userEMList = entityManager.getEntityManager().
+                createQuery("select u from User u where u.login = :login and u.password = :password and u.email = :email", User.class)
+                .setParameter("login", login)
+                .setParameter("password", password)
+                .setParameter("email", email)
+                .getResultList();
+
+        assertEquals("Both lists have the same size", userEMList.size(), foundUsers.size());
+        assertTrue("Both lists have the same users", userEMList.containsAll(foundUsers));
+    }
+
+    @Test
+    public void testFindAllByLoginPasswordEmailShouldReturnOnlyMatchingUsers_variant3() {
+        // Create
+        User matchingUser1 = createNewUser("login","password", "email@email.com");
+        User matchingUser2 = createNewUser("login","password", "email@email.com");
+
+        User unmatchingUser1 = createNewUser("login2","password", "email@email.com");
+        User unmatchingUser2 = createNewUser("login","password2", "email@email.com");
+        User unmatchingUser3 = createNewUser("login","password", "email2@email.com");
+
+        User userFilter = new User(null,"login","password", "email@email.com");
+        List<User> foundUsers =  userRepository.findAllByLoginPasswordEmail_variant3(userFilter);
 
         // Check that all matching users are returned
         assertTrue("Should contain a matching user", foundUsers.contains(matchingUser1));
@@ -202,6 +237,7 @@ public class UserRepositoryJpaTest {
         assertEquals("Both lists have the same size", userEMList.size(), foundUsers.size());
         assertTrue("Both lists have the same users", userEMList.containsAll(foundUsers));
     }
+
 
 
 
